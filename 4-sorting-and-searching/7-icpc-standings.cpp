@@ -53,12 +53,27 @@ using namespace std;
 
 int badness(vector<pair<string,int> > teams){
     
-    int count = 0;
+    int sum = 0;
+
+    // considering 1 based index
+    vector<int> count(teams.size() + 1, 0);
+    for(auto team : teams) {
+        count[team.second]++;
+    }
+
+    int pos = 1;
+    for(int i=1; i<=teams.size(); i++)  {
+        // as long as number of teams
+        // in ith position are not 0
+        while(count[i] != 0) {
+            sum += abs(pos - i);
+            pos++;
+            count[i]--;
+        }
+    }       
 
     
-       
-    
-    return count;
+    return sum;
 }
 
 // main function
@@ -75,7 +90,7 @@ int main() {
     };
 
     int answer = badness(teams);
-    
+    cout<<"\nBadness = "<<answer;
     
     return 0;
 
