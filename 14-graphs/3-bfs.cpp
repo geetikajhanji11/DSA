@@ -56,6 +56,43 @@ class Graph {
         }
     }
 
+    
+    // breadth first search (FIFO)
+    // FOR DISCONNECTED GRAPH
+    void bfs_disconnected(int n) {
+
+        vector<bool> visited(V, false);
+        queue<int> Q;
+
+        int source = 0;
+        
+        for(int i=0; i<n; i++) {
+            source = i;
+            
+            if(visited[source]) continue;
+            cout<<"\nSOURCE = "<<source<<" => ";
+
+            Q.push(source);
+            visited[source] = true;
+
+            while(!Q.empty()) {
+
+                int curr_vertex = Q.front();
+                cout<<curr_vertex<<", ";
+                
+                list<int> nbrs = adjList[curr_vertex];
+                for(int nbr : nbrs) {
+                    if(!visited[nbr]) {
+                        Q.push(nbr);
+                        visited[nbr] = true;
+                    }
+                }
+                Q.pop();
+            }
+
+        }
+    }
+
 };
 
 int main() {
