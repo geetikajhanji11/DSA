@@ -2,6 +2,7 @@
 using namespace std;
 
 vector<int> searchRange(vector<int>& nums, int target) {
+    
     // search left 
     // (first occurrence)
     int low = 0;
