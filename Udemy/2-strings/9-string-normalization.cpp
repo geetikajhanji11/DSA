@@ -27,13 +27,8 @@ output:
 string normalize(const string &sentence) {
     string copy = sentence;
     //Make the changes in copy, and return it
-    
-    int i = 0;
-    while(copy[i] == ' ') {
-        i++;
-    }
 
-    for(; i<copy.length(); i++) {
+    for(int i = 0; i<copy.length(); i++) {
         if(copy[i] == ' ') continue;
         copy[i] = toupper(copy[i]);
         i++;
