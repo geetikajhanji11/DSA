@@ -27,6 +27,7 @@ Output:
 #include <deque>
 using namespace std;
 
+// ------------ APPROACH - 1 -------------------
 pair<int, int> minPair(vector<int> a1, vector<int> a2) {
 
     // sorting any 1 array
@@ -65,6 +66,36 @@ pair<int, int> minPair(vector<int> a1, vector<int> a2) {
 
     return p;
 
+}
+
+// ------------ APPROACH - 2 -------------------
+pair<int, int> minPair(vector<int> a1, vector<int> a2) {
+
+    // sorting both arrays
+    sort(a1.begin(), a1.end());
+    sort(a2.begin(), a2.end());
+
+    int i = 0;
+    int j = 0;
+
+    int min_diff = INT_MAX;
+    int x = INT_MAX;
+    int y = INT_MAX;
+
+    while(i < a1.size() && j < a2.size()) {
+
+        int diff = abs(a1[i] - a2[j]);
+        if(diff < min_diff) {
+            min_diff = diff;
+            x = a1[i];
+            y = a2[j];
+        }
+
+        if(a1[i] <= a2[j]) i++;
+        else j++;
+    }
+
+    return {x, y};
 }
 
 // main function

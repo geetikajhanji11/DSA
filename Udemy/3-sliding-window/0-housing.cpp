@@ -21,6 +21,35 @@ and return the pair having least difference)
 
 */
 
+// ------- more readable -----------
+vector<pair<int, int>> getPlotPairs(vector<int> plots, int k) {
+
+    int left = 0;
+    int right = 0;
+
+    int curr_sum = 0;
+    int target = k;
+
+    vector<pair<int,int>> result;
+
+    while(right < plots.size()) {
+        curr_sum += plots[right];
+
+        while(curr_sum > target) {
+            curr_sum -= plots[left];
+            left++;
+        }
+        
+        if(curr_sum == target) {
+            result.push_back({left, right});
+        }   
+
+        right++;
+    }
+
+    return result;
+}
+
 vector<pair<int, int>> getPlotPairs(vector<int> plots, int k) {
     vector<pair<int, int>> result;
 
