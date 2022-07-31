@@ -57,6 +57,43 @@ node* buildTree() {
     return newNode;
 }
 
+// ******************************************************
+// *************** APPROACH - 1 ***************
+// MORE READABLE SOLUTION
+// CAN BE OPTIMIZED USING DP
+
+int max_sum(node* root, unordered_map<node*, int> &dp) {
+
+    if(root == NULL) return 0;
+    if(dp.find(root) != dp.end()) return dp[root];
+
+    // includeing current node
+    int include = root->data;
+    if(root->left != NULL) {
+        include += max_sum(root->left->left, dp) + max_sum(root->left->right, dp);
+    }
+    if(root->right != NULL) {
+        include += max_sum(root->right->left, dp) + max_sum(root->right->right, dp);
+    }
+
+    // excluding current node
+    int exclude = 0;
+    exclude += max_sum(root->left, dp);
+    exclude += max_sum(root->right, dp);
+
+    int ans = max(include, exclude);
+    dp.insert({root, ans});
+
+    return dp[root];
+}
+
+int maximum_subset_sum(node* root) {
+    unordered_map<node*, int> dp;
+    int ans = max_sum(root, dp);
+    return ans;
+}
+
+// *************** APPROACH - 2 ***************
 // *************** MAXIMUM SUBSET SUM TREE ***************
 class nodePair {
     public:
@@ -82,7 +119,6 @@ nodePair maxSubset(node* root) {
     
     int includeSum = root->data + left.exclude + right.exclude;
     int excludeSum = max(left.include, left.exclude) + max(right.include, right.exclude);
-
     
     p.include = includeSum;
     p.exclude = excludeSum;

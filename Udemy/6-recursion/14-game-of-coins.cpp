@@ -50,6 +50,37 @@ Explanation:
 #include <set>
 using namespace std;
 
+// ***********************************
+int pick_max(int left, int right, vector<int> &v) {
+
+    if(left == right || left + 1 == right) {
+        return max(v[left], v[right]);
+    }
+
+    // OSWALD PICKS LEFT
+    // (henry can pick either left or right)
+    // we have to minimize oswald's answer since henry picks max too
+    int henry_picks_left = pick_max(left+2, right, v);
+    int henry_picks_right = pick_max(left+1, right-1, v);
+    int oswald_picks_left = v[left] + min(henry_picks_left, henry_picks_right);
+
+    // OSWALD PICKS RIGHT
+    // (henry can pick either left or right)
+    // we have to minimize oswald's answer since henry picks max too
+    henry_picks_left = pick_max(left+1, right-1, v);
+    henry_picks_right = pick_max(left, right-2, v);
+    int oswald_picks_right = v[right] + min(henry_picks_left, henry_picks_right);
+
+    return max(oswald_picks_left, oswald_picks_right);
+}
+
+int MaxValue(int n, vector<int> v){
+    int ans = pick_max(0, n-1, v);
+    return ans;
+}
+
+
+// ***********************************
 int game(vector<int> v, int left, int right){
 
     // if there is 1 or 2 elements in subarray
@@ -76,9 +107,9 @@ int MaxValue(int n, vector<int> v){
 // main function 
 int main() {
 
-    vector<int> v{1, 2, 3, 4};
+    vector<int> v{1, 5, 2};
     
-    cout<<MaxValue(4, v);
+    cout<<MaxValue(3, v);
     return 0;
     
 }

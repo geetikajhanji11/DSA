@@ -103,7 +103,6 @@ node* buildTreeFromLevel(vector<int> arr) {
     
 }
 
-
 /* 
 
 ----------------------------
@@ -144,12 +143,44 @@ node* levelOrderBuild(){
 
 */
 
+// *************** MY NEW SOLUTION *******************
+node* construct(vector<int> arr) {
+    queue<node*> q;
+    node* root = new node(arr[0]);
+    q.push(root);
+
+    int i = 1;
+    while(i != arr.size()) {
+        node* curr = q.front();
+        q.pop();
+        if(curr == NULL) {
+            i += 2;
+            continue;
+        }
+
+        node* left_node = arr[i] != -1 ? new node(arr[i]) : NULL;
+        curr->left = left_node;
+        q.push(left_node);
+        i++;
+
+        node* right_node = arr[i] != -1 ? new node(arr[i]) : NULL;
+        curr->right = right_node;
+        q.push(right_node);
+        i++;
+
+    }
+    return root;
+}
+// ****************************************************************
+
+
 int main() {
 
     vector<int> arr{
         1, 2, 3, 4, 5, -1, 6, -1, -1, 7, -1, -1, -1, -1, -1
     };
-    node *root = buildTreeFromLevel(arr);
+    // node *root = buildTreeFromLevel(arr);
+    node* root = construct(arr);
     levelOrderLine(root);
 
 	return 0;

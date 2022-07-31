@@ -33,6 +33,29 @@ Example 3:
 #include <deque>
 using namespace std;
 
+// --------------------- SWAP APPROACH -----------------------------
+void dfs(int i, vector<int> &nums, vector<vector<int>> &result) {
+
+    if(i == nums.size()) {
+        result.push_back(nums);
+        return;
+    }
+
+    for(int j=i; j<nums.size(); j++) {
+        swap(nums[i], nums[j]);
+        dfs(i+1, nums, result);
+        swap(nums[i], nums[j]);
+    }
+}
+
+vector<vector<int>> permute(vector<int>& nums) {
+    vector<vector<int>> result;
+    dfs(0, nums, result);
+    return result;
+}
+
+// ------------------ VISITED APPROACH --------------------------------
+
 
 void recur(vector<vector<int>> &result, vector<int> nums, vector<int> curr, vector<bool> visited) {
 

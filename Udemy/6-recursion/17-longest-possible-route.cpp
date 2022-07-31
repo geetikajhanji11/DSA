@@ -44,6 +44,47 @@ Output:
 #include <set>
 using namespace std;
 
+// *********** RETURN TYPE INT *******************
+/*
+
+vector<int> dx = {0, 0, -1, 1};
+vector<int> dy = {-1, 1, 0, 0};
+
+bool in_bounds(int i, int j, vector<vector<int>> &v) {
+    return i >= 0 && i < v.size() && j >= 0 && j < v[0].size();
+}
+
+int dfs(int i, int j, vector<vector<int>> v) {
+
+    if(!in_bounds(i, j, v)) return 0;
+    if(v[i][j] == 0) return 0;
+
+    if(i == v.size() - 1 && j == v[0].size() - 1) {
+        return 1;
+    } 
+
+    v[i][j] = 0; // visited
+    int max_path = 0;
+
+    for(int k=0; k<4; k++) {
+        int next_i = i + dx[k];
+        int next_j = j + dy[k];
+        int size = dfs(next_i, next_j, v);
+        max_path = max(max_path, size); 
+    }
+
+    v[i][j] = 1;
+    return max_path + 1;
+}
+
+int findLongestPath(int m, int n, vector<vector<int>> v){
+    //Complete this function. Do not modify the name or parameters. You can make a helper function if needed.
+    return dfs(0, 0, v) - 1;
+}
+
+*/
+
+
 bool indexInBounds(int i, int j, int m, int n) {
     if(i >= 0 && i < m && j >= 0 && j < n) return true;
     return false;

@@ -93,6 +93,22 @@ void levelOrderLine(node* root) {
 }
 
 // ************** REPLACE WITH SUM **************
+
+int replace_with_sum(node* root) {
+
+    if(root == NULL) return 0;
+    if(root->left == NULL && root->right == NULL) return root->data;
+
+    int left_sum = replace_with_sum(root->left);
+    int right_sum = replace_with_sum(root->right);
+
+    int data = root->data;
+    root->data = left_sum + right_sum;
+
+    return data + root->data; 
+}
+
+// **********************************************
 class sumPair {
     public:
         int data;   // current element
