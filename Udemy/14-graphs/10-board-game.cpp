@@ -1,5 +1,124 @@
 /*******************************************************************
 BOARD GAME
+
+
+
+----------- ANOTHER APPROACH -----------
+
+class Node {
+    public:
+    char ch;
+    unordered_map<char, Node*> children;
+    bool isTerminal;
+    string word;
+
+    Node(char ch) {
+        this->ch = ch;
+        this->word = "";
+        this->isTerminal = false;
+    }
+};
+
+class Trie {
+    public:
+    Node* root;
+
+    Trie() {
+        this->root = new Node('\0');
+    }
+
+    void insert(string word) {
+        Node* temp = root;
+        for(char ch : word) {
+            if(temp->children.count(ch) == 0) {
+                temp->children[ch] = new Node(ch);
+            }
+            temp = temp->children[ch];
+        }
+        temp->isTerminal = true;
+        temp->word = word;
+    }
+};
+
+vector<int> di = {0, 1 , 1 ,1, 0, -1, -1,-1};
+vector<int> dj = {-1,-1, 0, 1, 1, 1, 0, -1};
+
+bool in_bounds(int i, int j, vector<vector<char>> &board) {
+    return i >= 0 && i < board.size() && j >= 0 && j < board[0].size();
+}
+
+void find_words(int i, int j, Node* root, vector<vector<char>> &board, vector<vector<int>> visited, vector<string> &result) {
+    
+    if(!in_bounds(i, j, board)) return;
+
+    if(visited[i][j]) return;
+
+    if(root->isTerminal) {
+        result.push_back(root->word);
+    }
+
+    visited[i][j] = true;
+
+    for(int k=0; k<8; k++) {
+        int next_i = i + di[k];
+        int next_j = j + dj[k];
+        if(!in_bounds(next_i, next_j, board)) continue;
+        for(auto child=root->children.begin(); child != root->children.end(); child++) {
+            char child_ch = child->first;
+            Node* child_node = child->second;
+            if(child_ch == board[next_i][next_j]) {
+                find_words(next_i, next_j, child_node, board, visited, result);
+
+            }
+        }
+    }
+
+    visited[i][j] = false;
+}
+
+void board_game(vector<vector<char>> &board, vector<string> &words) {
+    Trie t;
+    for(string word : words) {
+        t.insert(word);
+    }
+    vector<string> result;
+    int m = board.size();
+    int n = board[0].size();
+    vector<vector<int>> visited(m, vector<int>(n, 0));
+
+    for(int i=0; i<m; i++) {
+        for(int j=0; j<n; j++) {
+            find_words(i, j, t.root, board, visited, result);
+        }
+    }
+
+    int i = 0;
+
+    set<string> s(result.begin(), result.end());
+    for(string str : s) {
+        cout<<i<<": ";
+        cout<<str<<endl;
+        i++;
+    }
+
+}
+
+
+int main() {
+
+    vector<string> words = {"EKT", "SNAKE", "FOR", "QUEZ", "SNACK", "SNACKS", "GO","TUNES","CAT"};
+    
+    vector<vector<char>> board = { 
+        { 'S', 'E', 'R' ,'T'}, 
+        { 'U', 'N', 'K' ,'S'},
+        { 'T', 'C', 'A' ,'T'} 
+    };
+
+    board_game(board, words);
+
+    return 0;
+}
+
 *******************************************************************/
 
 #include<iostream>

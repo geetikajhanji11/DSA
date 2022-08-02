@@ -26,17 +26,17 @@
 using namespace std;
 
 /**************** DFS & BACKTRACKING SOLUTION ****************/
-bool cellInBounds(int i, int j, int rows, int cols) {
-    if(i >= 0 && i < rows && j >= 0 && j < cols) return true;
-    return false;
+bool cellInBounds(int i, int j, vector<vector<int>> &grid) {
+    return i >= 0 && i < grid.size() && j >= 0 && j < grid[0].size();
 }
 
-int dfs(vector<vector<int> > grid, int i, int j, vector<vector<int>> &visited, int total_cost, int &min_cost) {
+void dfs(vector<vector<int> > grid, int i, int j, vector<vector<int>> &visited, int total_cost, int &min_cost) {
 
     // cell is not in bounds
-    if(!cellInBounds(i, j, grid.size(), grid[0].size())) return 0;
+    if(!cellInBounds(i, j, grid)) return;
+
     // cell already visited, do not traverse
-    if(visited[i][j]) return 0;
+    if(visited[i][j]) return;
 
     // get the current cost
     int current_cost = grid[i][j];
@@ -46,7 +46,6 @@ int dfs(vector<vector<int> > grid, int i, int j, vector<vector<int>> &visited, i
         if(total_cost + current_cost < min_cost) {
             min_cost = total_cost + current_cost;
         }
-        return total_cost + current_cost;
     }
 
     // mark the current node as visited
@@ -57,17 +56,15 @@ int dfs(vector<vector<int> > grid, int i, int j, vector<vector<int>> &visited, i
     vector<int> dy = {0, 0, -1, 1};
 
     // recursive call in each direction
-    int cost;
+    int cost = INT_MAX;
     for(int k=0; k<4; k++) {
         int next_i = i + dx[k];
         int next_j = j + dy[k];
-        cost = dfs(grid, next_i, next_j, visited, total_cost + current_cost, min_cost);
+        dfs(grid, next_i, next_j, visited, total_cost + current_cost, min_cost);
     }
 
     // backtracking
     visited[i][j] = false;
-
-    return cost;
 }
 
 int shortest_path(vector<vector<int> > grid) {
@@ -82,73 +79,54 @@ int shortest_path(vector<vector<int> > grid) {
 }
 
 /**************** DIJKSHTRA SOLUTION ****************/
-class Node {
-public:
-    int x;
-    int y;
-    int distance;
-
-    Node(int x, int y, int dist) {
-        this->x = x;
-        this->y = y;
-        this->distance = dist;
-    }
-};
-
-//comparator should return boolean value, 
-// indicating whether the element passed as 
-// first argument is considered to go before 
-// the second in the specific strict weak ordering 
-class Compare {
-    public:
-    bool operator() (const Node &a, const Node &b) {
-        return a.distance <= b.distance;
-    }
-};
 
 int shortest_path_djk(vector<vector<int> > grid) {
+
     int rows = grid.size();
     int cols = grid[0].size();
-
-    vector<vector<int>> distance(rows+1, vector<int>(cols+1, INT_MAX));
-    set<Node, Compare> s;
-
+    vector<vector<int>> distance(rows, vector<int>(cols, INT_MAX));
     distance[0][0] = grid[0][0];
-    s.insert(Node(0, 0, distance[0][0]));
+
+    // 0: distance till node
+    // 1 : i
+    // 2 : j
+    set<vector<int>> s;
+
+    s.insert({grid[0][0], 0, 0});
+    vector<int> dx = {0, 0, -1, 1};
+    vector<int> dy = {-1, 1, 0, 0};
 
     while(!s.empty()) {
-        auto it = s.begin();
+        auto itr = s.begin();
 
-        int curr_x = it->x;
-        int curr_y = it->y;
-        int curr_distance = it->distance;
+        int distance_till_node = (*itr)[0];
+        int i = (*itr)[1];
+        int j = (*itr)[2];
 
-        s.erase(it);
-
-        // 4 directions => up, down, left, right
-        vector<int> dx = {-1, 1, 0, 0};
-        vector<int> dy = {0, 0, -1, 1};
+        s.erase(itr);
 
         for(int k=0; k<4; k++) {
-            int next_x = curr_x + dx[k];
-            int next_y = curr_y + dy[k];
-            int new_distance = curr_distance + grid[next_x][next_y];
-            if(cellInBounds(next_x, next_y, rows, cols) && new_distance < distance[next_x][next_y]) {
+            int next_i = i + dx[k];
+            int next_j = j + dy[k];
+            if(!cellInBounds(next_i, next_j, grid)) continue;
 
-                // if the next node already exists in set
-                // erase it
-                Node temp(next_x, next_y, distance[next_x][next_y]);
-                if(s.find(temp) != s.end()) {
-                    s.erase(s.find(temp));
-                } 
+            int nbr = grid[next_i][next_j];
+            int new_distance = distance_till_node + nbr;
 
-                // insert next node in set and update distance vector
-                distance[next_x][next_y] = new_distance;
-                s.insert(Node(next_x, next_y, new_distance));
+            if(new_distance < distance[next_i][next_j]) {
+
+                auto nbr_itr = s.find({distance[next_i][next_j], next_i, next_j});
+                if(nbr_itr != s.end()) {
+                    s.erase(nbr_itr);
+                }
+                distance[next_i][next_j] = new_distance;
+                s.insert({new_distance, next_i, next_j});
             }
         }
 
-    } 
+    }
+
+
     return distance[rows-1][cols-1];
 }
 

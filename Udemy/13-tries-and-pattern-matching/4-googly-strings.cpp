@@ -25,13 +25,7 @@ Sample Output:
     googly
     googoole
 
-*******************************************************************************/
-
-#include <iostream>
-#include<unordered_map>
-#include<vector>
-using namespace std;
-
+// --------- PRATEEK SOLUTION -------------
 class Node {
 public:
     char data;
@@ -128,6 +122,96 @@ vector<string> googlyStrings(vector<string> input) {
     }
     
     return output;
+}
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_map>
+#include<vector>
+using namespace std;
+
+// **************************************************
+// MORE READABLE SOLUTION
+// **************************************************
+
+class Node {
+public:
+    char data;
+    unordered_map<char, Node*> m;
+    bool isTerminal;
+    
+    // constructor
+    Node(char d) {
+        data = d;
+        isTerminal = false;
+    }
+};
+
+// Trie class
+class Trie {
+    Node *root;
+    
+    public: 
+    
+    // constructor
+    Trie() {
+        root = new Node('\0');
+    }
+    
+    // gets the root of the Trie
+    Node *getRoot() {
+        return root;
+    }
+    
+    // insert a new word
+    void insert(string word) {
+        Node *curr_node = root;
+        
+        for(char letter : word) {
+            // map does not contain the letter
+            if(curr_node->m.count(letter) == 0) {
+                Node *n = new Node(letter);
+                curr_node->m[letter] = n;
+            }
+            
+            // go to next node
+            curr_node = curr_node->m[letter];
+        }
+        curr_node->isTerminal = true;
+        return;
+    }
+};
+
+bool is_googly(int i, string word, Node* root, Trie t, int count) {
+    
+    if(i == word.length()) {
+        return root->isTerminal && count + 1 >= 2;
+    } 
+
+    if(root->m.count(word[i]) == 0) return false;
+    root = root->m[word[i]];
+    
+    if(root->isTerminal) {
+        if(is_googly(i+1, word, t.getRoot(), t, count+1)) return true;
+    }
+    
+    return is_googly(i+1, word, root, t, count);
+}
+
+vector<string> googlyStrings(vector<string> input) {
+    Trie t;
+    for(string str : input) {
+        t.insert(str);
+    }
+
+    vector<string> result;
+    for(string str : input) {
+        if(is_googly(0, str, t.getRoot(), t, 0)) {
+            result.push_back(str);
+        }
+    }
+
+    return result;
 }
 
 int main() {
