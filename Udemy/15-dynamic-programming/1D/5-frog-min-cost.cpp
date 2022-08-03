@@ -17,6 +17,59 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+/*
+
+**************** TOP - DOWN ****************
+int min_cost(int i, vector<int> &stones, vector<int> &dp) {
+
+    if(i == stones.size() - 1) return 0;
+    if(i >= stones.size()) return INT_MAX;
+
+    if(dp[i] != INT_MAX) return dp[i];
+
+    int ans = INT_MAX;
+
+    int jump_1 = min_cost(i+1, stones, dp);
+    int jump_2 = min_cost(i+2, stones, dp);
+  
+    if(jump_1 != INT_MAX) {
+        jump_1 += abs(stones[i] - stones[i+1]);
+    } 
+    if(jump_2 != INT_MAX) {
+        jump_2 += abs(stones[i] - stones[i+2]);
+    }
+
+    ans = min(jump_1, jump_2);
+
+    return dp[i] = ans;
+}
+
+**************** BOTTOM - UP ****************
+int min_cost(vector<int> &stones) {
+    
+    int n = stones.size();
+    vector<int> dp(n, INT_MAX);
+    dp[n-1] = 0;
+
+    for(int i=n-2; i>=0; i--) {
+        int ans = dp[i];
+        
+        int jump_1 = INT_MAX;
+        int jump_2 = INT_MAX;
+        
+        if(i+1 < n) jump_1 = dp[i+1];
+        if(i+2 < n) jump_2 = dp[i+2];
+
+        if(jump_1 != INT_MAX) jump_1 += abs(stones[i] - stones[i+1]);
+        if(jump_2 != INT_MAX) jump_2 += abs(stones[i] - stones[i+2]);  
+
+        dp[i] = min(jump_1, jump_2);
+    }
+
+    return dp[0];
+}
+*/
+
 // top - down approach
 int min_cost(int i, vector<int> stones, vector<int> &dp) {
 

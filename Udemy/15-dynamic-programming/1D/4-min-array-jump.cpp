@@ -18,6 +18,7 @@
 using namespace std;
 
 // top - down apprach
+/*
 int min_jump(int curr_jump_index, vector<int> arr, vector<int> &dp) {
     
     // base cases
@@ -39,13 +40,57 @@ int min_jump(int curr_jump_index, vector<int> arr, vector<int> &dp) {
     dp[curr_jump_index] = 1 + ans;
     return dp[curr_jump_index];
 }
+*/
+
+// ********** TOP-DOWN APPROACH **********
+int min_jumps(int i, vector<int> &jumps, vector<int> &dp) {
+
+    if(i == jumps.size()-1) return 0;
+    if(i >= jumps.size()) return INT_MAX;
+
+    if(dp[i] != INT_MAX) return dp[i];
+
+    int total_jumps = jumps[i];
+    int ans = INT_MAX;
+    for(int jump=1; jump<=total_jumps; jump++) {
+        int remaining = min_jumps(i+jump, jumps, dp);
+        if(remaining == INT_MAX) continue;
+        ans = min(ans, remaining);
+    }
+
+    if(ans == INT_MAX) return dp[i] = INT_MAX;
+    return dp[i] = ans + 1;
+
+}
+
+// ********** BOTTOM-UP APPROACH **********
+int min_jumps(vector<int> &jumps) {
+    
+    int n = jumps.size();
+    vector<int> dp(n, INT_MAX);
+    dp[n-1] = 0;
+
+    for(int i=n-2; i>=0; i--) {
+        int total_jumps = jumps[i];
+        int ans = dp[i];
+        for(int jump=1; jump<=total_jumps; jump++) {
+            if(i+jump >= n) break;
+            ans = min(ans, dp[i+jump]);
+        }
+        if(ans == INT_MAX) continue;
+        dp[i] = ans + 1;
+    }
+
+    return dp[0];
+}
 
 int main() {
 
     vector<int> jumps = {3, 4, 2, 1, 2, 3, 7, 1, 1, 3};
-    vector<int> dp(jumps.size()+1, 0);
+    // vector<int> dp(jumps.size()+1, 0);
+    vector<int> dp(jumps.size()+1, INT_MAX);
 
-    cout<<min_jump(0, jumps, dp);
+    cout<<min_jumps(0, jumps, dp);
 
     return 0;
 }

@@ -49,12 +49,13 @@ int climb_ladder(int n, int k) {
 
     /****** SOLUTION - 2 ****** 
     // O(NK)
-    for(int i=k; i<=n; i++) {
-        int curr_sum = 0;
+    vector<int> dp(n+1, 0);
+    dp[0] = 1;
+    for(int i=1; i<=n; i++) {
         for(int j=1; j<=k; j++) {
-            curr_sum += dp[i-j];
+            if(i-j < 0) break;
+            dp[i] += dp[i-j];
         }
-        dp[i] = curr_sum;
     }
     */
 

@@ -6,6 +6,23 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// ---------- TOP - DOWN ---------- 
+int maximum_profit(int i, int w, vector<int> weights, vector<int> prices, vector<vector<int>> &dp) {
+
+    if(w == 0) return 0;
+    if(i == weights.size()) return 0;
+
+    if(dp[i][w] != 0) return dp[i][w];
+
+    int include_profit = 0;
+    if(weights[i] <= w) {
+        include_profit = prices[i] + maximum_profit(i+1, w-weights[i], weights, prices, dp);
+    }
+    int exclude_profit = maximum_profit(i+1, w, weights, prices, dp);
+
+    return dp[i][w] = max(include_profit, exclude_profit); 
+}
+
 int knapsack_top_down(int i, int curr_weight, vector<int> prices, vector<int> weights, vector<vector<int>> &dp) {
 
     // base case
@@ -24,6 +41,7 @@ int knapsack_top_down(int i, int curr_weight, vector<int> prices, vector<int> we
     return dp[i][curr_weight] = max(include_profit, exclude_profit);
 }
 
+// ---------- BOTTOM - UP ----------
 int knapsack_bottom_up(int n, int w, vector<int> prices, vector<int> weights) {
 
    vector<vector<int>> dp(n+1, vector<int>(w+1, 0));

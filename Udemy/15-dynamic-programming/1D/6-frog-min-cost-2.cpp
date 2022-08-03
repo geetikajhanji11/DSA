@@ -17,7 +17,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// top - down approach
+// *************** TOP - DOWN APPROACH ***************
 int min_cost_helper(int i, int k, vector<int> stones, vector<int> &dp) {
 
     // base cases
@@ -48,7 +48,29 @@ long long minimumCost(vector<int> stones, int k){
     return min_cost_helper(0, k, stones, dp);
 }
 
+// *************** BOTTOM - UP APPROACH ***************
+long long minimumCost(vector<int> stones, int k){
 
+    int n = stones.size();
+    vector<int> dp(n, INT_MAX);
+    dp[n-1] = 0;
+
+    for(int i=n-2; i>=0; i--) {
+
+        int ans = dp[i];
+        for(int jump=1; jump<=k; jump++) {
+            if(i + jump >= n) break;
+            int cost = dp[i+jump];
+            if(cost != INT_MAX) {
+                cost += abs(stones[i] - stones[i+jump]);
+            }
+            ans = min(ans, cost);
+        }
+        dp[i] = ans;
+    }
+
+    return dp[0];
+}
 
 int main() {
 
