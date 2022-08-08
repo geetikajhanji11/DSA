@@ -62,27 +62,29 @@ long long findCombinations(int n, vector<int> coins) {
 // ************** bottom-up ************** 
 // https://www.youtube.com/watch?v=Mjy4hd2xgrs&ab_channel=NeetCode
 // TO DO
-int findCombinations_BU(int n, vector<int> coins) {
-    vector<vector<long long>> dp(coins.size()+1, vector<long long>(n+1, 0));
+int findCombinations_BU(int amount, vector<int> coins) {
+    int n = coins.size();
+    vector<vector<int>> dp(amount+1, vector<int>(n+1, 0));
 
-    for(int i=0; i<=coins.size(); i++) dp[i][0] = 1;
+    for(int j=0; j<=n; j++) dp[0][j] = 1;
 
-    // rows = coins
-    // cols = amount
-    for(int i=1; i<=coins.size(); i++) {
-        for(int curr_sum=1; curr_sum<=n; curr_sum++) {
-            int include = curr_sum - coins[i] >= 0 ? dp[i][curr_sum - coins[i]] : 0;
-            int exclude = dp[i-1][curr_sum];
-            dp[i][curr_sum] = include + exclude;
+    for(int curr_amount=1; curr_amount<=amount; curr_amount++){
+        for(int j=1; j<=n; j++) {
+            dp[curr_amount][j] = dp[curr_amount][j-1]; // EXCLUDE current coin
+            if(curr_amount - coins[j-1] >= 0){ // including current coin if diff >= 0
+                dp[curr_amount][j] += dp[curr_amount-coins[j-1]][j]; // INCLUDE
+            }
         }
     }
+   
     for(auto v : dp) {
         for(int num : v) {
             cout<<num<<" ";
         }
         cout<<endl;
     }
-    return dp[coins.size()][n];
+
+    return dp[amount][n];
 }
 
 int main() {
