@@ -52,6 +52,51 @@ bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
     return true;
 }
 
+
+// *************** ALSO WORKS ***************
+class Solution {
+public:
+    bool can_finish_course(int course, unordered_map<int, unordered_set<int>> &pre_map, vector<bool> &visited) {
+
+        if(visited[course] && pre_map[course].size() == 0) return true;
+        if(visited[course] && pre_map[course].size() != 0) return false;
+
+        visited[course] = true;
+        if(pre_map[course].size() == 0) return true;
+
+        auto temp_pre_map = pre_map[course];
+        for(int pre : temp_pre_map) {
+            if(!can_finish_course(pre, pre_map, visited)) return false;
+            pre_map[course].erase(pre);
+        }
+
+        return true;
+    }
+
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int, unordered_set<int>> pre_map;
+        vector<bool> visited(numCourses, false);
+
+        for(int i=0; i<numCourses; i++) {
+            unordered_set<int> v;
+            pre_map[i] = v;
+        }        
+
+        for(auto prerequisite : prerequisites) {
+            int a = prerequisite[0];
+            int b = prerequisite[1];
+            pre_map[a].insert(b);
+        }
+
+        for(int course=0; course<numCourses; course++) {
+            if(!can_finish_course(course, pre_map, visited)) 
+                return false;
+        }
+
+        return true;
+    }
+};
+
 int main() {
 
     vector<vector<int>> prerequisites = {
