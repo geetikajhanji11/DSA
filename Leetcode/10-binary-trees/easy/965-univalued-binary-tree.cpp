@@ -29,3 +29,24 @@ public:
         return isUnival(root, val);
     }
 };
+
+// ************ OTHER SOLUTION ************
+class Solution {
+public:
+    bool isUnivalTree(TreeNode* root) {
+        if(!root) return true;
+        
+        bool flag = true;
+        if(root->left) {
+            flag = flag && isUnivalTree(root->left);
+            flag = flag && (root->val == root->left->val);
+        }
+
+        if(root->right) {
+            flag = flag && isUnivalTree(root->right);
+            flag = flag && (root->val == root->right->val);
+        }
+
+        return flag;
+    }
+};
