@@ -10,6 +10,7 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+// RECURSION
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         
     // base case
@@ -42,7 +43,36 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
     return root;
 }
 
-int main() {
+// ITERATIVE
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        
+        while(root != NULL) {
 
-    return 0;
-}
+            if(root == p) return p;
+            if(root == q) return q;
+
+            // p, q > root
+            if(p->val > root->val && q->val > root->val) {
+                root = root->right;
+            }
+
+            // p, q < root
+            else if(p->val < root->val && q->val < root->val) {
+                root = root->left;
+            }
+
+            // splitting
+            else if(p->val > root->val && q->val < root->val ||
+                p->val < root->val && q->val > root->val
+            ) {
+                return root;
+            }
+
+        }
+
+        return NULL;
+
+    }
+};
