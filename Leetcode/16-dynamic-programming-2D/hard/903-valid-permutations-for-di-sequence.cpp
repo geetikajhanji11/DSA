@@ -1,10 +1,43 @@
 /*******************************************************************
 DID NOT UNDERSTAND
+https://leetcode.com/problems/valid-permutations-for-di-sequence/solutions/168278/c-java-python-dp-solution-o-n-2/
+
 *******************************************************************/
 
 #include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
+
+// *********** DISCUSS SOL ***********
+class Solution {
+    int MOD = 1e9 + 7;
+public:
+    int numPermsDISequence(string S) {
+        int n = S.length();
+
+        vector<vector<int>> dp(n + 1, vector<int>(n + 1));
+
+        for (int j = 0; j <= n; j++) dp[0][j] = 1;
+
+        for (int i = 0; i < n; i++)
+
+            if (S[i] == 'I') {
+                int curr = 0;
+                for (int j=0; j<n-i; j++) {
+                    dp[i + 1][j] = curr = (curr + dp[i][j]) % MOD;
+                }    
+            }
+                
+            else {
+                int curr = 0;
+                for (int j=n-i-1; j>=0; j--) {
+                    dp[i + 1][j] = curr = (curr + dp[i][j + 1]) % MOD;
+                }
+            }
+                
+        return dp[n][0];
+    }
+};
 
 // *********** LOGIC CORRECT BUT TLE ***********
 class Solution {
