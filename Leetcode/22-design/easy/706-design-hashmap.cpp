@@ -6,7 +6,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// *********** ARRAY IMPLEMENTATION ***********
+// *********** ACTUAL HASH IMPLEMENTATION ***********
 struct Node {
 public:
     int key, val;
@@ -23,22 +23,26 @@ public:
     const static int size = 19997;
     const static int mult = 12582917;
     Node* data[size] = {};
+    
     int hash(int key) {
         return (int)((long)key * mult % size);
     }
+
     void put(int key, int val) {
         remove(key);
         int h = hash(key);
         Node* node = new Node(key, val, data[h]);
         data[h] = node;
-    }    
+    }
+
     int get(int key) {
         int h = hash(key);
         Node* node = data[h];
         for (; node != NULL; node = node->next)
             if (node->key == key) return node->val;
         return -1;
-    }    
+    }
+        
     void remove(int key) {
         int h = hash(key);
         Node* node = data[h];
@@ -57,7 +61,7 @@ public:
 };
 
 
-// *********** ACTUAL HASH IMPLEMENTATION ***********
+// *********** ARRAY IMPLEMENTATION ***********
 class MyHashMap {
 
     vector<int> hashMap;
