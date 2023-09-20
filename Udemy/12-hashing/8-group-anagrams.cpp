@@ -33,59 +33,57 @@ Output:
 #include<climits>
 using namespace std;
 
+// *********** UNORDERED MAP ***********
+class Solution {
 
-vector<vector<string>> groupAnagrams(vector<string> strs) {
-    
-    map< vector<int>, vector<string> > mp;
-    
-    for(string word : strs) {
-        vector<int> freq(26, 0);
-        for(char ch : word) {
-            freq[ch - 'a']++;
+    string getKey(string str) {
+        vector<int> count(26);
+        for (int j = 0; j < str.size(); j++) {
+            count[str[j] - 'a']++;
         }
         
-        if(mp.find(freq) != mp.end()) {
-            mp[freq].push_back(word);
-        } else {
-            vector<string> anagrams;
-            anagrams.push_back(word);
-            mp[freq] = anagrams;
+        string key = "";
+        for (int i = 0; i < count.size(); i++) {
+            key.append(to_string(count[i]) + '#');
+        }
+        return key;
+    }
+
+public:
+
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        for (int i = 0; i < strs.size(); i++) {
+            string key = getKey(strs[i]);
+            m[key].push_back(strs[i]);
         }
         
-    }
-    
-    vector<vector<string>> wordAnagrams;
-    for(auto &it: mp) {
-        vector<string> anagrams;
-        for(string anagram : it.second) {
-            anagrams.push_back(anagram);
+        vector<vector<string>> result;
+        for (auto it = m.begin(); it != m.end(); it++) {
+            result.push_back(it->second);
         }
-        wordAnagrams.push_back(anagrams);
+        return result;
     }
     
-    return wordAnagrams;
-    
-}
+};
 
-int main() {
-    
-    vector<string> strs{
-        "eat",
-        "tea",
-        "tan",
-        "ate",
-        "nat",
-        "bat",
-    };
-    
-    vector<vector<string>> result = groupAnagrams(strs);
-    cout<<"\nRESULT\n";
-    for(vector<string> words : result) {
-        for(string word : words) {
-            cout<<word<<" ";
+// *********** ORDERED MAP ***********
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<vector<int>, vector<string>> m;
+
+        for(string str : strs) {
+            vector<int> count(26, 0);
+            for(char c : str) count[c - 'a']++;
+            m[count].push_back(str);
         }
-        cout<<endl;
+
+        vector<vector<string>> result;
+        for(auto itr : m) {
+            result.push_back(itr.second);
+        }
+
+        return result;
     }
-    
-    return 0;
-}
+};

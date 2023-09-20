@@ -25,6 +25,25 @@ bool isAnagram(string s, string t) {
     return true;
 }
 
+// -------- ALTERNATE SOLUTION --------
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        unordered_map<char, int> m;
+
+        for(char c : s) m[c]++;
+
+        int totalZeros = 0;
+        for(char c : t) {
+            m[c]--;
+            if(m[c] < 0) return false;
+            if(m[c] == 0) totalZeros++;
+        }
+
+        return totalZeros == m.size();
+    }
+};
+
 int main() {
 
     return 0;

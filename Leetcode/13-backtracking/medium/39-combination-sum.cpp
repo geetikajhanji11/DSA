@@ -42,36 +42,32 @@ private:
 #include<bits/stdc++.h>
 using namespace std;
 
-void dfs(int i, int sum, vector<int> curr_candidates, vector<int>& candidates, int target, vector<vector<int>> &result) {
+class Solution {
 
-    if(sum > target) return;
+    void dfs(int idx, int sum, vector<int> arr, int target, vector<int> &candidates, vector<vector<int>> &result) {
+        if(idx >= candidates.size()) return;
+        if(sum > target) return;
 
-    if(sum == target) {
-        result.push_back(curr_candidates);
-        return;
+        if(sum == target) {
+            result.push_back(arr);
+            return;
+        }
+
+        for(int i=idx; i<candidates.size(); i++) {
+            arr.push_back(candidates[i]);
+            dfs(i, sum+candidates[i], arr, target, candidates, result);
+            arr.pop_back();
+        }
+
     }
 
-    for(int index=i; index<candidates.size(); index++) {
-        int candidate = candidates[index];
-        curr_candidates.push_back(candidate);
-        dfs(index, sum+candidate, curr_candidates, candidates, target, result);
-        curr_candidates.pop_back();
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> result;
+
+        dfs(0, 0, {}, target, candidates, result);
+
+        return result;
     }
-    
-}
-
-vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-
-    vector<vector<int>> result;
-    vector<int> curr_candidates;
-    
-    sort(candidates.begin(), candidates.end());
-    dfs(0, 0, curr_candidates, candidates, target, result);
-
-    return result;
-}
-
-int main() {
-
-    return 0;
-}
+};

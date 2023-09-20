@@ -26,42 +26,32 @@ using namespace std;
 // }
 
 // 1 pass
-void sortColors(vector<int>& nums) {
-    int left = 0;
-    int right = nums.size() - 1;
-    int i = 0;
+// {2,0,2,1,1,0};
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int left = 0; // position for 0
+        int i = 0;
+        int right = nums.size() - 1; // position for 2
 
-    while(i <= right) {
-        if(nums[i] == 0) {
+        while(i < right) {
+     
+            if(nums[i] == 0) {
+                swap(nums[i], nums[left]);
+                i++;
+                left++;
+            }
 
-            // swap left and i 
-            int temp = nums[i];
-            nums[i] = nums[left];
-            nums[left] = temp;
+            else if(nums[i] == 2) {
+                swap(nums[i], nums[right]);
+                right--;
+            }
 
-            left++;
-            i++;
-        }
+            else {
+                i++;
+            }
 
-        else if(nums[i] == 2) {
-
-            // swap i and right
-            int temp = nums[i];
-            nums[i] = nums[right];
-            nums[right] = temp;
             
-            right--;
-        }
-
-        else {
-            i++;
         }
     }
-}
-
-int main() {
-
-    vector<int> nums = {2,0,2,1,1,0};
-    sortColors(nums);
-    return 0;
-}
+};

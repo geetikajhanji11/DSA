@@ -6,33 +6,22 @@
 #include<bits/stdc++.h>
 using namespace std;
 
- bool isPalindrome(string s) {
-    int n = s.length();
-    int left = 0;
-    int right = n - 1;
-
-    while(left < right) {
-
-        while(left < n && !isalnum(s[left])) left++;
-        while(right >= 0 && !isalnum(s[right])) right--;
+class Solution {
+public:
+    bool isPalindrome(string s) {
         
-        if(left >= n || right < 0) return true;
-        
-        char l = tolower(s[left]);
-        char r = tolower(s[right]);
+        int i = 0;
+        int j = s.length() - 1;
 
-        if(l == r) {
-            left++;
-            right--;
-        } else {
-            return false;
+        while(i < j) {
+            while(i < j && !isalnum(s[i])) i++;
+            while(i < j && !isalnum(s[j])) j--;
+
+            if(tolower(s[i]) != tolower(s[j])) return false;
+            i++;
+            j--;
         }
+
+        return true;
     }
-
-    return true; 
-}
-
-int main() {
-
-    return 0;
-}
+};
