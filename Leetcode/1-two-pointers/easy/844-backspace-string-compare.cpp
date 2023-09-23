@@ -60,3 +60,33 @@ public:
         return (i == -1 && j == -1);
     }
 };
+
+// ************** STACK **************
+class Solution {
+
+    string getString(string &s) {
+        stack<int> stk;
+
+        for(char ch : s) {
+            if(ch == '#') {
+                if(!stk.empty()) stk.pop();
+            } else {
+                stk.push(ch);
+            }
+        } 
+
+        string str = "";
+        while(!stk.empty()) {
+            char top = stk.top();
+            str = top + str;
+            stk.pop();
+        }
+
+        return str;
+    }
+
+public:
+    bool backspaceCompare(string s, string t) {
+        return getString(s) == getString(t);
+    }
+};
