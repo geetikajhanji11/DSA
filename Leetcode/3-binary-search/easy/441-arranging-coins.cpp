@@ -6,6 +6,47 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+class Solution {
+
+    int fitScore(int x, int &n) {
+        long long sum = (x % 2 == 0 ? (long long) (x / 2) * (long long) (x + 1) : ((long long) (long long) (x + 1) / 2) * (long long) x);
+        if(sum == n) return 0; // all rows are filled
+        if(sum < n) return 1; // some rows are filled
+        if(sum > n) return - 1; // overflow
+        return 2;
+    }
+
+public:
+    int arrangeCoins(int n) {
+        int low = 1;
+        int high = n;
+
+        int ans = 0;
+        while(low <= high) {
+            int mid = (high - low)/2 + low;
+
+            int score = fitScore(mid, n);
+
+            // a perfect sum, return directly
+            if(score == 0) return mid;
+
+            // some rows are filled,
+            // we want to maximize filling of rows
+            else if(score == 1) {
+                ans = mid;
+                low = mid + 1;
+            } 
+            
+            // overflow, go back left 
+            else {
+                high = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
 // **************** LINEAR **************** 
 // int arrangeCoins(int n) {
 

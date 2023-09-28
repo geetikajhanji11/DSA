@@ -11,16 +11,14 @@ From these points, we can implement algorithm.
 1. Take left and right pointers . 
     left points to start of list. right points to end of the list.
 2. find mid.
-    if mid is even, then it's duplicate should be in next index.
+
+3.  if mid is even, then it's duplicate should be in next index.
 	or if mid is odd, then it's duplicate  should be in previous index.
 	check these two conditions, 
-	if any of the conditions is satisfied,
-	then pattern is not missed, 
-	so check in next half of the array. i.e, left = mid + 1
-	if condition is not satisfied, then the pattern is missed.
-	so, single number must be before mid.
-	so, update end to mid.
-3. At last return the nums[left]
+
+[0,1,2,3,4,5,6,7,8] = index
+[1,1,2,3,3,4,4,8,8] = array
+
 *******************************************************************/
 
 #include<iostream>
@@ -28,38 +26,74 @@ From these points, we can implement algorithm.
 using namespace std;
 
 class Solution {
+
+    bool isAlone(int i, vector<int>& nums) {
+        if(i - 1 >= 0 && nums[i - 1] == nums[i]) return false;
+        if(i + 1 < nums.size() && nums[i + 1] == nums[i]) return false;
+        return true;
+    }
+
 public:
     int singleNonDuplicate(vector<int>& nums) {
-        int n = nums.size();
-        
         int low = 0;
-        int high = n - 1;
+        int high = nums.size() - 1;
 
         while(low <= high) {
             int mid = (low + high) / 2;
-            int left = mid - 1;
-            int right = mid + 1;
 
-            if(left >= 0 && nums[mid] == nums[left]) {
+            // check left and right
+            if(isAlone(mid, nums)) return nums[mid];
 
+
+            // if mid is even
+            // duplicate should be at right
+            if(mid % 2 == 0) {
+
+                // no more right 
                 // go left
-                if(mid % 2 == 0) high = mid - 1;
+                if(mid + 1 == nums.size()) {
+                    high = mid - 1;
+                }
 
-                // go right
-                else low = mid + 1;
+                // duplicate is at right
+                // all okay at left side
+                //go right
+                else if(nums[mid + 1] == nums[mid]) {
+                    low = mid + 1;
+                } 
+                
+                // duplicate is not at right
+                // something wrong on left
+                // go left
+                else {
+                    high = mid - 1;
+                }
+
             } 
             
-            else if(right < n && nums[mid] == nums[right]) {
-
-                // go right
-                if(mid % 2 == 0) low = mid + 1; 
-
-                // go left
-                else high = mid - 1;
-            } 
-            
+            // if mid is odd
+            // duplicate should be at left
             else {
-                return nums[mid];
+
+                // no more left
+                // go right
+                if(mid - 1 < 0) {
+                    low = mid + 1;
+                }
+
+                // duplicate is at left
+                // all okay at left side
+                // go right
+                else if(nums[mid - 1] == nums[mid]) {
+                    low = mid + 1;
+                } 
+                
+                // duplicate is not at left
+                // something wrong on left
+                // go left
+                else {
+                    high = mid - 1;
+                }
             }
         }
 

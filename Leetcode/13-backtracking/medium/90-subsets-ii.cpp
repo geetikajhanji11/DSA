@@ -17,7 +17,7 @@ void dfs(int i, vector<int> curr, vector<int>& nums, vector<vector<int>> &result
     dfs(i+1, curr, nums, result);
     curr.pop_back();
     
-    // don't include current number
+    // don't include current number (or any of its duplicates)
     while(i+1 < nums.size() && nums[i] == nums[i+1]) i++;
     dfs(i+1, curr, nums, result);   
 }

@@ -2,6 +2,45 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// ****** MY STRAIGHTFORWARD SOLUTION ******
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int low = 0;
+        int high = nums.size() - 1;
+
+        int minNum = INT_MAX;
+
+        // everytime, either left part will be sorted
+        // or the right 
+        while(low <= high) {
+            int mid = (low + high) / 2;
+
+            minNum = min(minNum, nums[mid]);
+
+            // if left side is sorted [low, mid],
+            // nums[low] is the min of that part of nums
+            // compare it with curr min and be done with that part
+            // go right
+            if(nums[low] <= nums[mid]) {
+                minNum = min(minNum, nums[low]);
+                low = mid + 1;
+            } 
+            
+            // if right side is sorted [mid, high],
+            // nums[mid] is the min of that part of nums
+            // which we already compared above 
+            // go left
+            else {
+                high = mid - 1;
+            }
+
+        }
+
+        return minNum;
+    }
+};
+
 // Neetcode Solution
 class Solution {
 public:

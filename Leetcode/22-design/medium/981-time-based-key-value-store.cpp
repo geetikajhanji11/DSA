@@ -7,45 +7,33 @@
 using namespace std;
 
 class TimeMap {
+    unordered_map<string, vector<pair<string, int>>> m;
 
 public:
     TimeMap() {}
     
     void set(string key, string value, int timestamp) {
-        // first => timestamp
-        // second =? key
-        m[key].push_back({timestamp, value});
+        m[key].push_back({value, timestamp});
     }
     
     string get(string key, int timestamp) {
-
-        if (m.find(key) == m.end()) return "";
-        
         int low = 0;
         int high = m[key].size() - 1;
-        
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (m[key][mid].first < timestamp) {
+
+        string result = "";
+        while(low <= high) {
+            int mid = (low + high) / 2;
+
+            if(m[key][mid].second == timestamp) return m[key][mid].first;
+
+            if(m[key][mid].second < timestamp) {
+                result = m[key][mid].first;
                 low = mid + 1;
-            } else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
             } else {
-                return m[key][mid].second;
+                high = mid - 1;
             }
         }
-        
-        if (high >= 0) {
-            return m[key][high].second;
-        }
-        
-        return "";
+
+        return result;
     }
-private:
-    unordered_map<string, vector<pair<int, string>>> m;
 };
-
-int main() {
-
-    return 0;
-}

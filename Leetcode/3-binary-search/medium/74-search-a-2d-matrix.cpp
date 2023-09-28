@@ -11,45 +11,52 @@ Space: O(1)
 #include<bits/stdc++.h>
 using namespace std;
 
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
 
-bool searchMatrix(vector<vector<int>>& matrix, int target) {
-    int lowRow = 0;
-    int highRow = matrix.size() - 1;
-    
-    while (lowRow < highRow) {
-
-        int mid = lowRow + (highRow - lowRow) / 2;
+        // binary search in last column
+        // smallest value that is bigger than target (get that row)
+        int row_idx = -1;
+        int last_col = cols - 1;
         
-        if (matrix[mid][0] == target) return true;
-        
-        if (matrix[mid][0] < target && target < matrix[mid + 1][0]) {
-            lowRow = mid;
-            break;
+        int low = 0;
+        int high = rows - 1;
+
+        while(low <= high) {
+            int mid = (low + high) / 2;
+
+            if(matrix[mid][last_col] == target) return true;
+
+            if(matrix[mid][last_col] < target) {
+                low = mid + 1;
+            } else {
+                row_idx = mid;
+                high = mid - 1;
+            }
         }
 
-        if (matrix[mid][0] < target) lowRow = mid + 1;
-        else highRow = mid - 1;
+        // couldn't find row
+        if(row_idx == -1) return false;
+
+        // normal binary search in found row
+        low = 0;
+        high = cols - 1;
+
+        while(low <= high) {
+            int mid = (low + high) / 2;
+
+            if(matrix[row_idx][mid] == target) return true;
+
+            if(matrix[row_idx][mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return false;
     }
-    
-    int lowCol = 0;
-    int highCol = matrix[0].size() - 1;
-    
-    while (lowCol <= highCol) {
-        int mid = lowCol + (highCol - lowCol) / 2;
-        if (matrix[lowRow][mid] == target) {
-            return true;
-        }
-        if (matrix[lowRow][mid] < target) {
-            lowCol = mid + 1;
-        } else {
-            highCol = mid - 1;
-        }
-    }
-    
-    return false;
-}
-
-int main() {
-
-    return 0;
-}
+};
