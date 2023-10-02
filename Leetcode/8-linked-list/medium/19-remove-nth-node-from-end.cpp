@@ -10,6 +10,38 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+// ********** USING DUMMY **********
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+
+        ListNode* curr = dummy;
+        ListNode* fast = head;
+
+        while(n > 0) {
+            fast = fast->next;
+            n--;
+        }
+
+        ListNode* prev = dummy;
+
+        while(fast != NULL) {
+            prev = prev->next;
+            fast = fast->next;
+        }
+
+        ListNode* target = prev->next;
+        prev->next = target->next;
+        delete target;
+
+        return dummy->next;
+    }
+};
+
+// ********** ALTERNATE **********
 ListNode* removeNthFromEnd(ListNode* head, int n) {
     ListNode* slow = head;
     ListNode* fast = head;

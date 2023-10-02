@@ -43,7 +43,43 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 
 }
 
-int main() {
+// ***************** ONE LOOP ***************** 
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* h1 = list1;
+        ListNode* h2 = list2;
+        ListNode* head = new ListNode(0);
+        ListNode* result_head = head; 
 
-    return 0;
-}
+        while(h1 != NULL || h2 != NULL) {
+
+            if(h1 != NULL && h2 != NULL) {
+                if(h1->val <= h2->val) {
+                    head->next = new ListNode(h1->val);
+                    h1 = h1->next;
+                } else {
+                    head->next = new ListNode(h2->val);
+                    h2 = h2->next;
+                }
+                head = head->next;
+            }
+
+            else if(h1 != NULL) {
+                head->next = new ListNode(h1->val);
+                h1 = h1->next;
+                head = head->next;
+            }
+
+            else if(h2 != NULL) {
+                head->next = new ListNode(h2->val);
+                h2 = h2->next;
+                head = head->next;
+            }
+        }
+
+
+
+        return result_head->next;
+    }
+};
