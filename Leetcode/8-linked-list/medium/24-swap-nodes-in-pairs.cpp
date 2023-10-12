@@ -40,6 +40,37 @@ ListNode* swapPairs(ListNode* head) {
     return dummy->next;
 }
 
+
+
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(head == NULL || head->next == NULL) return head;
+
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+
+        ListNode* prev = dummy;
+        ListNode* first = head;
+        ListNode* second = head->next;
+
+        while(first != NULL && second != NULL) {
+            ListNode* nextFirst = second->next;
+
+            prev->next = second;
+            first->next = second->next;
+            second->next = first;
+
+            prev = first;
+            first = nextFirst;
+            if(nextFirst != NULL) second = nextFirst->next;
+            
+        }   
+
+        return dummy->next;
+    }
+};
+
 int main() {
 
     return 0;

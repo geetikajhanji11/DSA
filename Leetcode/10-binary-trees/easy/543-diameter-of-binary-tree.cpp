@@ -36,6 +36,30 @@ struct TreeNode {
    
 // }
 
+class Solution {
+
+    int height(TreeNode* root, int &diameter) {
+        if(!root) return 0;
+
+        int left = height(root->left, diameter);
+        int right = height(root->right, diameter);
+
+        int d = left + right + 1;
+        diameter = max(d, diameter);
+
+        return max(left, right) + 1;
+    }
+
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        int diameter = 0;
+        height(root, diameter);
+        return diameter;
+    }
+};
+
+// **************************************************
+
 pair<int, int> getDiameterAndHeight(TreeNode* root) {
     if(root == NULL) return {0, -1};
 

@@ -14,6 +14,35 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if(head == NULL || head->next == NULL) return head;
+
+        ListNode* oddTail = head;
+        ListNode* evenTail = head->next;
+        ListNode* curr = evenTail->next;
+
+        while(curr != NULL) {
+
+            ListNode* evenHead = oddTail->next;
+            oddTail->next = curr;
+            curr = curr->next;
+            oddTail = oddTail->next;
+            oddTail->next = evenHead;
+            evenTail->next = curr;
+            evenTail = evenTail->next;
+            
+            if(curr) curr = curr->next;
+            
+        }
+
+        return head;
+    }
+};
+
+// ************* ALTERNATE SOLUTION *************
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
